@@ -45,13 +45,36 @@ function rock_array_sort(array $array, $key = null, $asc = true) {
 	}
 	else {
 		$GLOBALS["ROCK_ARRAY_SORT_KEY_" . nil] = $key;
-		uasort($array, 
-			$asc ? create_function('$p1,$p2', '$key=$GLOBALS["ROCK_ARRAY_SORT_KEY_" . nil];$p1=rock_array_get($p1,$key);$p2=rock_array_get($p2,$key);if ($p1>$p2){return 1;}elseif($p1==$p2){return 0;}else{return -1;}')
+		uasort($array,
+			$asc ?
+			function($p1, $p2) {
+				$key=$GLOBALS["ROCK_ARRAY_SORT_KEY_" . nil];
+				$p1=rock_array_get($p1,$key);
+				$p2=rock_array_get($p2,$key);
+				if($p1>$p2){
+					return 1;
+				} elseif($p1==$p2) {
+					return 0;
+				} else {
+					return -1;
+				}
+			}
 			:
-			create_function('$p1,$p2', '$key=$GLOBALS["rock_ARRAY_SORT_KEY_" . nil];$p1=rock_array_get($p1,$key);$p2=rock_array_get($p2,$key);if ($p1<$p2){return 1;}elseif($p1==$p2){return 0;}else{return -1;}')
+			function($p1, $p2) {
+				$key=$GLOBALS["rock_ARRAY_SORT_KEY_" . nil];
+				$p1=rock_array_get($p1,$key);
+				$p2=rock_array_get($p2,$key);
+				if($p1<$p2) {
+					return 1;
+				} elseif($p1==$p2) {
+					return 0;
+				} else {
+					return -1;
+				}
+			}
 		);
 		unset($GLOBALS["ROCK_ARRAY_SORT_KEY_" . nil]);
-	}	
+	}
 	return $array;
 }
 
@@ -104,7 +127,7 @@ function rock_real_id($id) {
 		}
 		return;
 	}
-	
+
 	if (is_numeric($id)) {
 		return floatval($id);
 	}
@@ -207,7 +230,7 @@ function rock_load_languages() {
 }
 
 /**
- * Get current path of theme 
+ * Get current path of theme
  *
  * @return string
  * @since 1.1.0

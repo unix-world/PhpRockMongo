@@ -1,2 +1,0 @@
-# PhpRockMongo
-PHP MongoDB Admin
